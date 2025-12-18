@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    .prose ul { list-style-type: disc; padding-left: 20px; }
+    .prose ol { list-style-type: decimal; padding-left: 20px; }
+    .prose p { margin-bottom: 0.5rem; }
+    .prose strong { font-weight: bold; color: #e2e8f0; }
+</style>
+
+<div class="flex h-[90vh] antialiased text-gray-800 justify-center">
+    <div class="flex flex-col flex-auto h-full p-4 max-w-4xl w-full">
+        
+        <div class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-900/80 backdrop-blur-md h-full p-4 border border-gray-700 shadow-2xl">
+            
+            <!-- Header -->
+        <div class="flex items-center justify-between mb-4 border-b border-gray-700 pb-2">
+                <div class="flex items-center">
+                    <!-- AVATAR IMAGE -->
+<div class="relative h-10 w-10">
+    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" 
+         alt="Avatar" 
+         class="h-full w-full rounded-full object-cover shadow-lg border-2 border-indigo-400">
+    <!-- Green Online Dot -->
+    <span class="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-gray-900"></span>
+</div>
+                    <div class="ml-3">
+                        <div class="font-bold text-white text-lg">SASSU -THE TRAINER </div>
+                        <div class="text-xs text-gray-400">Ready to Train you </div>
+                    </div>
+                </div>
+            </div>
+    
+
+            <!-- Messages Area -->
+            <div class="flex flex-col h-full overflow-x-auto mb-4 scrollbar-hide" id="chat-box">
+                <!-- Welcome Message -->
+                <div class="col-start-1 col-end-8 p-3 rounded-lg">
+                    <div class="flex flex-row items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" 
+                                 class="h-full w-full rounded-full object-cover shadow-md border border-gray-600">
+                        </div>
+                        <div class="relative ml-3 text-sm bg-gray-800 py-3 px-4 shadow rounded-xl text-gray-200 border border-gray-700">
+                            <div>Hello! I'm SASSU. I am here to help you regarding FITNESSS and HEALTH</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thinking Indicator -->
+            <div id="thinking-indicator" class="hidden col-start-1 col-end-8 p-3 rounded-lg mb-2">
+                <div class="flex flex-row items-center">
+                    <div class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0 animate-bounce">
+                        🤖
+                    </div>
+                    <div class="ml-3 text-sm text-gray-400 italic">Getting you Trained...</div>
+                </div>
+            </div>
+
+            <!-- Input Area (Cleaned) -->
+            <div class="flex flex-row items-center h-16 rounded-xl w-full px-4 bg-gray-800 border border-gray-700">
+                <div class="flex-grow">
+                    <div class="relative w-full">
+                        <input type="text" id="user-input" 
+                            class="flex w-full border rounded-xl focus:outline-none focus:border-indigo-500 pl-4 h-10 bg-gray-700 text-white border-gray-600 placeholder-gray-400" 
+                            placeholder="Type your question..." 
+                            onkeypress="handleEnter(event)"/>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <button onclick="sendMessage()" class="flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white px-4 py-2 flex-shrink-0 transition duration-300 shadow-lg">
+                        <span>Send</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. Load History on Start
+    document.addEventListener("DOMContentLoaded", function() {
+        loadChatHistory();
+    });
+
+    // 2. Handle Enter Key
+    function handleEnter(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    // 3. Load Chat History from Backend
+    async function loadChatHistory() {
+        const chatBox = document.getElementById("chat-box");
+        try {
+            const response = await fetch("/api/history");
+            const history = await response.json();
+            
+            if (history.length > 0) {
+                chatBox.innerHTML = ""; // Clear welcome message
+            }
+
+            history.forEach(msg => {
+                appendMessage(msg.role, msg.content);
+            });
+            
+            chatBox.scrollTop = chatBox.scrollHeight;
+        } catch (error) {
+            console.error("History Error:", error);
+        }
+    }
+
+    // 4. Draw Messages (Fixed Logic)
+    function appendMessage(role, text) {
+        const chatBox = document.getElementById("chat-box");
+        const botAvatar = "https://cdn-icons-png.flaticon.com/512/4712/4712109.png";
+        let htmlContent = "";
+
+        if (role === 'user') {
+            // --- USER MESSAGE (Clean, No Image) ---
+            htmlContent = `
+                <div class="col-start-6 col-end-13 p-3 rounded-lg">
+                    <div class="flex items-center justify-start flex-row-reverse">
+                        <div class="relative mr-3 text-sm bg-indigo-100 py-3 px-4 shadow rounded-xl text-gray-800">
+                            <div>${text}</div>
+                        </div>
+                    </div>
+                </div>`;
+        } else {
+            // --- BOT MESSAGE (With Image) ---
+            // Check if marked is available, otherwise show plain text
+            const parsedText = (typeof marked !== 'undefined') ? marked.parse(text) : text;
+            
+            htmlContent = `
+                <div class="col-start-1 col-end-8 p-3 rounded-lg">
+                    <div class="flex flex-row items-center">
+                        <div class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0 overflow-hidden border-2 border-green-400 shadow-md">
+                            <img src="${botAvatar}" alt="Bot" class="h-full w-full object-cover">
+                        </div>
+                        <div class="relative ml-3 text-sm bg-gray-800 py-3 px-4 shadow rounded-xl text-gray-200 border border-gray-700 prose text-white">
+                            ${parsedText}
+                        </div>
+                    </div>
+                </div>`;
+        }
+        
+        chatBox.innerHTML += htmlContent;
+    }
+
+    // 5. Send Message Logic
+    async function sendMessage() {
+        const input = document.getElementById("user-input");
+        const chatBox = document.getElementById("chat-box");
+        const thinking = document.getElementById("thinking-indicator");
+        const text = input.value.trim();
+        
+        if (!text) return;
+
+        // Show User Message immediately
+        appendMessage('user', text);
+        
+        // Clear input
+        input.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Show Thinking
+        if(thinking) thinking.classList.remove("hidden");
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+            const response = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await response.json();
+            
+            // Hide Thinking
+            if(thinking) thinking.classList.add("hidden");
+            
+            if (data.error) {
+                appendMessage('model', `⚠️ Error: ${data.error}`);
+            } else {
+                appendMessage('model', data.response);
+            }
+        } catch (error) {
+            if(thinking) thinking.classList.add("hidden");
+            appendMessage('model', "⚠️ Connection Error. Check terminal.");
+        }
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+{% endblock %}

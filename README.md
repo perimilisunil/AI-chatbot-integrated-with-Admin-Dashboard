@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Backend-Flask-green?style=for-the-badge&logo=flask&logoColor=white)
-![Google Gemini](https://img.shields.io/badge/LLM-Google%20Gemini%201.5-orange?style=for-the-badge&logo=google&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/LLM-Google%20Gemini%202.5-orange?style=for-the-badge&logo=google&logoColor=white)
 ![ChromaDB](https://img.shields.io/badge/Vector%20DB-ChromaDB-purple?style=for-the-badge)
 ![Tailwind CSS](https://img.shields.io/badge/Frontend-Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 
@@ -76,3 +76,4 @@ fitness-ai-bot/
 │                
 └── screenshots/             # Documentation Images & Avatar Images
 ```
+

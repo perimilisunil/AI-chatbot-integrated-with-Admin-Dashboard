@@ -14,3 +14,9 @@ chroma_db/
 .DS_Store
 Thumbs.db
 
+#utility and debugging scripts 
+test_connection.py
+test_flask.py
+find_models.py
+diagnose.py
+test_setup.py

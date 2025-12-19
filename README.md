@@ -12,8 +12,8 @@ This project demonstrates a modular architecture capable of running complex AI w
 
 ---
 
-## 🚀 Access Application Here
-### [🔗 LIVE DEMO](https://chatbot-bv7x.onrender.com)
+## 🚀 Live Demo
+### [🔗 Click Here to Launch App](https://chatbot-bv7x.onrender.com)
 *(Note: Deployed on **Render** Free Tier. Please allow up to 50 seconds for the server to wake up on the first request.)*
 
 ---
@@ -86,18 +86,11 @@ fitness-ai-bot/
 - 🔐 Authentication-protected admin command center
 - ⚡ Optimized for Free Tier cloud deployment
   
-## ⚠️ Important Note (NLP Module)
-### This project architecture supports NLP-based user segmentation (Sentiment Analysis via TextBlob).
 
-  - ✅ Works well in local environments.
-  - ⚠️ Not recommended for deployment on free-tier cloud instances (like Render Free).
-  - **Reason** : NLP model loading consumes significant RAM (~100MB+) and may cause memory exhaustion (OOM Kills) on servers with only 512MB RAM.
-    
-  - **Recommendation**: Disable NLP modules in app.py during free-tier deployment (The current live                   version has this optimized).
 
-## 🔧 Installation & Local Setup
+# 🔧 Installation & Local Setup
 ### Follow these steps to run the project on your own machine.
-### Prerequisites
+* **Prerequisites**
 
   - Python 3.10 or higher.
   - A Google Cloud API Key (for Gemini).
@@ -179,3 +172,10 @@ Render's free tier utilizes **Ephemeral Storage**.
 *   **Chat History:** Persisted safely via **Neon (PostgreSQL)** (if configured) or resets on restart (if using SQLite).
 *   **RAG Knowledge Base:** Uploaded PDFs are processed into a local Vector Store. On the free tier, this knowledge resets if the server spins down due to inactivity.
     *   *Production Solution:* For persistent vector storage in production, switch the `rag_engine.py` logic to point to **Pinecone** or **Weaviate** cloud instances.
+
+## 🧪 Testing & Quality Assurance
+During development, this project underwent rigorous testing to ensure stability on Cloud environments:
+*   **Unit Testing:** Verified API connectivity and database integrity using custom Python scripts before deployment.
+*   **Environment Validation:** Automated checks for API key presence and library version compatibility.
+*   **Memory Optimization:** Stress-tested the RAG engine to ensure it operates within the 512MB RAM limit of the Render Free Tier.
+*   **Strategic NLP Omission**: While the architecture supports Sentiment Analysis (via TextBlob), this module was intentionally removed from the production branch to prioritize server stability and ensure the         application runs smoothly on **RENDER**

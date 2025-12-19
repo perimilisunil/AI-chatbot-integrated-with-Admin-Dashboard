@@ -29,8 +29,8 @@ RULES:
 model = None
 if api_key:
     try:
-        model = genai.GenerativeModel('gemini-2.0-flash', system_instruction=SYSTEM_INSTRUCTION)#type: ignore
-        print("✅ Model initialized: gemini-2.0-flash")
+        model = genai.GenerativeModel('gemini-2.5-flash', system_instruction=SYSTEM_INSTRUCTION)#type: ignore
+        print("✅ Model initialized: gemini-2.5-flash")
     except Exception as e:
         print(f"❌ Model Init Error: {e}")
 

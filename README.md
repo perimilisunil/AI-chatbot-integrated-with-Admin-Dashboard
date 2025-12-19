@@ -13,7 +13,7 @@ This project demonstrates a modular architecture capable of running complex AI w
 ---
 
 ## 🚀 Live Demo
-### [🔗 Click Here to Launch App](https://chatbot-bv7x.onrender.com)
+### [🔗 Click Here to Launch App](https://ai-chatbot-integrated-with-admin.onrender.com)
 *(Note: Deployed on **Render** Free Tier. Please allow up to 50 seconds for the server to wake up on the first request.)*
 
 ---
@@ -179,3 +179,4 @@ During development, this project underwent rigorous testing to ensure stability 
 *   **Environment Validation:** Automated checks for API key presence and library version compatibility.
 *   **Memory Optimization:** Stress-tested the RAG engine to ensure it operates within the 512MB RAM limit of the Render Free Tier.
 *   **Strategic NLP Omission**: While the architecture supports Sentiment Analysis (via TextBlob), this module was intentionally removed from the production branch to prioritize server stability and ensure the         application runs smoothly on **RENDER**
+

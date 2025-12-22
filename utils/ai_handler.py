@@ -40,8 +40,7 @@ def get_ai_response(session_id, user_message):
     if not model:
         return "Error: Could not connect to Google Gemini. Check your API Key."
 
-    # 1. Save User Message (NO SENTIMENT)
-    # The previous error happened here or below because we passed 'sentiment'
+    # 1. Save User Message
     log_message(session_id, "user", user_message)
     
     # 2. RAG Search
@@ -57,7 +56,6 @@ def get_ai_response(session_id, user_message):
     history_formatted = []
     
     for row in history_rows:
-        # Use dot notation for SQLAlchemy objects
         role = "user" if row.role == "user" else "model"
         history_formatted.append({"role": role, "parts": [{"text": row.content}]})
     
@@ -72,8 +70,7 @@ def get_ai_response(session_id, user_message):
         print(f"Gemini Generation Error: {e}")
         ai_text = "I'm having trouble connecting to the AI service right now."
         
-    # 5. Save AI Response (NO SENTIMENT)
-    # FIX: Removed 'sentiment=0'
+    # 5. Save AI Response 
     log_message(session_id, "model", ai_text)
     
     return ai_text

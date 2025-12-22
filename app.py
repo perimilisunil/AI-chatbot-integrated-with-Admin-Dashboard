@@ -1,7 +1,7 @@
 import sys
 import os
 
-# --- SQLITE FIX FOR CLOUD DEPLOYMENTS ---
+
 try:
     __import__('pysqlite3')
     sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
@@ -35,7 +35,7 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "dev_secret_key")
 # --- DATABASE INITIALIZATION ---
 init_db(app)
 
-# --- MIDDLEWARE ---
+# --- MIDDLE WARE ---
 @app.before_request
 def assign_session():
     if 'user_id' not in session:
@@ -70,7 +70,6 @@ def chat_api():
     user_message = data['message']
     session_id = session.get('user_id')
     
-    # REMOVED: TextBlob/Sentiment Analysis logic here to save RAM
     
     # AI Handler logs the messages internally now
     bot_response = get_ai_response(session_id, user_message)
@@ -97,7 +96,6 @@ def dashboard():
     stats = get_analytics()
     logs = get_all_logs()
     knowledge = get_all_documents()
-    # REMOVED: mood = get_sentiment_stats()
     
     return render_template('dashboard.html', stats=stats, logs=logs, knowledge=knowledge)
 

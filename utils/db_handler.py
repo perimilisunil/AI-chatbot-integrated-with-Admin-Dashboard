@@ -31,8 +31,7 @@ class ChatLog(db.Model):
 # --- HELPER FUNCTIONS ---
 
 def log_message(session_id, role, content, sentiment=None): 
-    # NOTE: We keep 'sentiment=None' in the definition just in case 
-    # app.py or ai_handler.py still tries to pass it, but we IGNORE it below.
+   
     if current_app:
         new_log = ChatLog(
             session_id=session_id, role=role,  content=content)# type:ignore
@@ -43,7 +42,6 @@ def get_chat_history(session_id, limit=10):
     """Gets recent messages in Chronological Order."""
     if current_app:
         # 1. Fetch the last 'limit' messages (Newest First) using ID
-        # Using ID is safer than timestamp because IDs are always sequential
         recent_messages = ChatLog.query.filter_by(session_id=session_id)\
                             .order_by(ChatLog.id.desc())\
                             .limit(limit)\

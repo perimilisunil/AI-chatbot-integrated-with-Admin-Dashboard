@@ -1,5 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
+<style>
+    .login-card input[type="password"] {
+        color: #000;              /* text color */
+        background-color: #fff;   /* input background */
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 100%;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .login-card input::placeholder {
+        color: #888;
+    }
+</style>
+
 <div class="login-card">
     <h2>Admin Login</h2>
     <form action="/admin/login" method="POST">

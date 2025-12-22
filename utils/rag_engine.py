@@ -12,7 +12,7 @@ if api_key:
     genai.configure(api_key=api_key)# type: ignore
 
 # GLOBAL VARS
-# FIX: We type hint this as 'Any' so VS Code stops complaining about .query()
+
 collection: Any = None
 chroma_client: Any = None
 
@@ -32,8 +32,6 @@ def init_chroma():
 
         # 1. Define a Dummy Embedding Function
         class GoogleGenerativeAIEmbeddingFunction(EmbeddingFunction):
-            # FIX for Line 32: We add '# type: ignore' to tell the editor 
-            # "We know this is an empty list, allow it."
             def __call__(self, input: Documents) -> Embeddings:
                 return [[] for _ in input] # type: ignore
 
@@ -72,7 +70,6 @@ def add_document_to_knowledge(text_chunk):
     
     try:
         result = get_embedding(text_chunk, "retrieval_document")
-        # 'collection' is now typed as Any, so no red lines here
         collection.add(
             documents=[text_chunk],
             embeddings=[result['embedding']],
